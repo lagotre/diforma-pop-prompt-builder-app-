@@ -11,7 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async signIn({ profile }) {
       const email = profile?.email ?? ''
-      return email.endsWith('@grupodiforma.com')
+      return !!email // temporal — permite cualquier cuenta Google para pruebas
     },
     async session({ session, token }) {
       if (session.user && token.sub) {
