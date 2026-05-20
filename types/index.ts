@@ -22,7 +22,10 @@ export interface Phase1Data {
   geographicMarket: string
 }
 
+export type Lifespan = 'T' | 'SP' | 'P'
+
 export interface Phase2Data {
+  lifespan: Lifespan | ''
   popCategory: string
   popSubtype: string
   materials: string[]

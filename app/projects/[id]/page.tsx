@@ -5,9 +5,11 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import type { Project, Phase1Data, Phase2Data, Phase3Data, Phase4Data } from '@/types'
 import {
-  COMMERCIAL_OBJECTIVES, CHANNELS, GEOGRAPHIC_MARKETS, POP_CATEGORIES, POP_SUBTYPES,
-  MATERIALS, CAMERA_ANGLES, LIGHTING_OPTIONS, MOODS, COLOR_GRADINGS, ASPECT_RATIOS,
+  COMMERCIAL_OBJECTIVES, CHANNELS, GEOGRAPHIC_MARKETS,
+  LIFESPANS, getCategoriesForLifespan, getTypesForCategoryAndLifespan, getMaterialsForTypeAndLifespan,
+  CAMERA_ANGLES, LIGHTING_OPTIONS, MOODS, COLOR_GRADINGS, ASPECT_RATIOS,
 } from '@/lib/utils'
+import type { Lifespan } from '@/types'
 
 const PHASES = [
   { num: 1, label: 'Brief Estratégico', desc: 'Objetivo, marca, canal' },
@@ -30,7 +32,7 @@ export default function ProjectWizardPage() {
     shopperTarget: '', channel: '', season: '', geographicMarket: '',
   })
   const [p2, setP2] = useState<Phase2Data>({
-    popCategory: '', popSubtype: '', materials: [],
+    lifespan: '', popCategory: '', popSubtype: '', materials: [],
     dimensions: { height: '', width: '', depth: '' },
     hasHeader: true, headerType: '', hasBase: true, hasSidePanels: true,
     shelvesCount: '', facingsPerShelf: '', totalSKUs: '',
@@ -298,51 +300,83 @@ export default function ProjectWizardPage() {
                 onNext={() => savePhase(2, p2, 3)}
                 onBack={() => setPhase(1)}
                 saving={saving}
-                valid={!!p2.popCategory && !!p2.popSubtype && p2.materials.length > 0}
+                valid={!!p2.lifespan && !!p2.popCategory && !!p2.popSubtype && p2.materials.length > 0}
               >
+                <Field label="Vida Útil del Display *">
+                  <div className="grid grid-cols-3 gap-3">
+                    {LIFESPANS.map(ls => (
+                      <button
+                        key={ls.value}
+                        type="button"
+                        onClick={() => setP2(prev => ({ ...prev, lifespan: ls.value, popCategory: '', popSubtype: '', materials: [] }))}
+                        className={`px-3 py-3 text-left rounded-xl border-2 transition-all ${
+                          p2.lifespan === ls.value
+                            ? 'border-brand-accent bg-brand-accent/10'
+                            : 'border-brand-border hover:border-brand-accent/40'
+                        }`}
+                      >
+                        <p className={`text-xs font-bold ${p2.lifespan === ls.value ? 'text-brand-accent' : 'text-brand-text'}`}>
+                          {ls.label}
+                        </p>
+                        <p className="text-[10px] text-brand-muted mt-0.5">{ls.sublabel}</p>
+                        <p className="text-[10px] text-brand-muted/80 mt-1 leading-tight">{ls.desc}</p>
+                      </button>
+                    ))}
+                  </div>
+                </Field>
+
                 <div className="grid grid-cols-2 gap-4">
                   <Field label="Categoría POP *">
                     <select
                       value={p2.popCategory}
-                      onChange={e => setP2(prev => ({ ...prev, popCategory: e.target.value, popSubtype: '' }))}
+                      onChange={e => setP2(prev => ({ ...prev, popCategory: e.target.value, popSubtype: '', materials: [] }))}
+                      disabled={!p2.lifespan}
                       className={inputCls}
                     >
                       <option value="">Seleccionar categoría...</option>
-                      {POP_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+                      {p2.lifespan && getCategoriesForLifespan(p2.lifespan as Lifespan).map(c => (
+                        <option key={c.value} value={c.value}>{c.emoji} {c.label}</option>
+                      ))}
                     </select>
                   </Field>
-                  <Field label="Subtipo *">
+                  <Field label="Tipo de Display *">
                     <select
                       value={p2.popSubtype}
-                      onChange={e => setP2(prev => ({ ...prev, popSubtype: e.target.value }))}
+                      onChange={e => setP2(prev => ({ ...prev, popSubtype: e.target.value, materials: [] }))}
                       disabled={!p2.popCategory}
                       className={inputCls}
                     >
-                      <option value="">Seleccionar subtipo...</option>
-                      {(POP_SUBTYPES[p2.popCategory] ?? []).map(s => (
-                        <option key={s.value} value={s.value}>{s.label}</option>
+                      <option value="">Seleccionar tipo...</option>
+                      {p2.popCategory && p2.lifespan && getTypesForCategoryAndLifespan(p2.popCategory, p2.lifespan as Lifespan).map(t => (
+                        <option key={t.value} value={t.value}>{t.label}</option>
                       ))}
                     </select>
                   </Field>
                 </div>
 
                 <Field label="Materiales * (seleccionar todos los que apliquen)">
-                  <div className="grid grid-cols-2 gap-1.5 max-h-48 overflow-y-auto pr-1">
-                    {MATERIALS.map(mat => (
-                      <button
-                        key={mat}
-                        type="button"
-                        onClick={() => toggleMaterial(mat)}
-                        className={`px-2.5 py-1.5 text-xs text-left rounded-lg border transition-all ${
-                          p2.materials.includes(mat)
-                            ? 'border-brand-accent bg-brand-accent/10 text-brand-accent font-medium'
-                            : 'border-brand-border text-brand-muted hover:border-brand-accent/40'
-                        }`}
-                      >
-                        {mat}
-                      </button>
-                    ))}
-                  </div>
+                  {p2.popSubtype && p2.lifespan ? (
+                    <div className="grid grid-cols-2 gap-1.5 max-h-48 overflow-y-auto pr-1">
+                      {getMaterialsForTypeAndLifespan(p2.popCategory, p2.popSubtype, p2.lifespan as Lifespan).map(mat => (
+                        <button
+                          key={mat}
+                          type="button"
+                          onClick={() => toggleMaterial(mat)}
+                          className={`px-2.5 py-1.5 text-xs text-left rounded-lg border transition-all ${
+                            p2.materials.includes(mat)
+                              ? 'border-brand-accent bg-brand-accent/10 text-brand-accent font-medium'
+                              : 'border-brand-border text-brand-muted hover:border-brand-accent/40'
+                          }`}
+                        >
+                          {mat}
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-brand-muted italic py-3">
+                      Selecciona vida útil, categoría y tipo de display para ver los materiales disponibles.
+                    </p>
+                  )}
                 </Field>
 
                 <Field label="Dimensiones (cm)">
