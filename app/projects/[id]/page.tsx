@@ -123,9 +123,7 @@ export default function ProjectWizardPage() {
       {/* Header */}
       <div className="bg-brand-dark text-white px-6 py-4 flex items-center gap-3 shadow-lg">
         <Link href="/dashboard" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div className="bg-white rounded-lg px-2 py-1">
-            <Image src="/logo-diforma4.jpg" alt="Diforma Group" width={88} height={36} className="object-contain" />
-          </div>
+          <Image src="/logo-diforma2.jpg" alt="Diforma Group" width={110} height={44} className="object-contain rounded-md" />
           <p className="hidden sm:block text-sm font-bold leading-tight">POP Prompt Builder</p>
         </Link>
         <span className="text-white/30">/</span>

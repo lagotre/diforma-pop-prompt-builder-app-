@@ -39,7 +39,7 @@ export function DiformaPDFDocument({ project }: { project: Project }) {
             <Text style={styles.title}>{project.name}</Text>
             <Text style={styles.subtitle}>{project.code} · {date} · POP Prompt Builder</Text>
           </View>
-          <Image style={styles.logoImg} src="/logo-diforma4.jpg" />
+          <Image style={styles.logoImg} src="/logo-diforma2.jpg" />
         </View>
 
         {/* Meta */}
