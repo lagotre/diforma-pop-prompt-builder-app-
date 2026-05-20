@@ -1,10 +1,11 @@
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
+import { Document, Page, Text, View, Image, StyleSheet } from '@react-pdf/renderer'
 import type { Project } from '@/types'
 
 const styles = StyleSheet.create({
   page: { padding: 40, backgroundColor: '#FFFFFF', fontFamily: 'Helvetica' },
-  header: { marginBottom: 20, paddingBottom: 12, borderBottomWidth: 2, borderBottomColor: '#E8672A' },
-  logo: { fontSize: 8, color: '#64748B', letterSpacing: 2, marginBottom: 4, textTransform: 'uppercase' },
+  header: { marginBottom: 20, paddingBottom: 12, borderBottomWidth: 2, borderBottomColor: '#E8672A', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
+  headerLeft: { flex: 1 },
+  logoImg: { width: 110, height: 44, objectFit: 'contain' },
   title: { fontSize: 18, fontFamily: 'Helvetica-Bold', color: '#0D1B2A' },
   subtitle: { fontSize: 10, color: '#64748B', marginTop: 2 },
   metaRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 16, backgroundColor: '#F5F7FA', padding: 10, borderRadius: 6 },
@@ -34,9 +35,11 @@ export function DiformaPDFDocument({ project }: { project: Project }) {
       <Page size="A4" style={styles.page}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.logo}>Diforma In Store · POP Prompt Builder</Text>
-          <Text style={styles.title}>{project.name}</Text>
-          <Text style={styles.subtitle}>{project.code} · {date}</Text>
+          <View style={styles.headerLeft}>
+            <Text style={styles.title}>{project.name}</Text>
+            <Text style={styles.subtitle}>{project.code} · {date} · POP Prompt Builder</Text>
+          </View>
+          <Image style={styles.logoImg} src="/logo-diforma4.jpg" />
         </View>
 
         {/* Meta */}
@@ -103,7 +106,7 @@ export function DiformaPDFDocument({ project }: { project: Project }) {
 
         {/* Footer */}
         <View style={styles.footer} fixed>
-          <Text style={styles.footerText}>Diforma In Store · Where your brand comes to life</Text>
+          <Text style={styles.footerText}>Diforma Group · Where your brand comes to life</Text>
           <Text style={styles.footerText}>{project.code}</Text>
         </View>
       </Page>

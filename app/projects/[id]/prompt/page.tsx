@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Project } from '@/types'
 
 function CopyButton({ text }: { text: string }) {
@@ -122,13 +123,10 @@ export default function PromptPage() {
       <div className="bg-brand-dark text-white px-6 py-4 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-3">
           <Link href="/dashboard" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 rounded-full border-2 border-brand-accent flex items-center justify-center">
-              <div className="w-3.5 h-3.5 rounded-full bg-brand-accent" />
+            <div className="bg-white rounded-lg px-2 py-1">
+              <Image src="/logo-diforma4.jpg" alt="Diforma Group" width={88} height={36} className="object-contain" />
             </div>
-            <div className="hidden sm:block">
-              <p className="text-[10px] text-white/50 uppercase tracking-widest leading-none">Diforma In Store</p>
-              <p className="text-sm font-bold leading-tight">POP Prompt Builder</p>
-            </div>
+            <p className="hidden sm:block text-sm font-bold leading-tight">POP Prompt Builder</p>
           </Link>
           <span className="text-white/30">/</span>
           <div>

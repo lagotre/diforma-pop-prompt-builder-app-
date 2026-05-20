@@ -2,6 +2,7 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { signOut } from '@/auth'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
@@ -12,13 +13,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
       {/* Top Nav */}
       <header className="bg-brand-dark text-white px-6 py-4 flex items-center justify-between shadow-lg">
         <Link href="/dashboard" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div className="w-8 h-8 rounded-full border-2 border-brand-accent flex items-center justify-center">
-            <div className="w-3.5 h-3.5 rounded-full bg-brand-accent" />
+          <div className="bg-white rounded-lg px-2 py-1">
+            <Image src="/logo-diforma4.jpg" alt="Diforma Group" width={88} height={36} className="object-contain" />
           </div>
-          <div>
-            <p className="text-[10px] text-white/50 uppercase tracking-widest leading-none">Diforma In Store</p>
-            <p className="text-sm font-bold leading-tight">POP Prompt Builder</p>
-          </div>
+          <p className="text-sm font-bold leading-tight">POP Prompt Builder</p>
         </Link>
 
         <div className="flex items-center gap-4">
